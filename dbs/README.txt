@@ -1,0 +1,1 @@
+This is just a directory for storing the db's that the system will create.

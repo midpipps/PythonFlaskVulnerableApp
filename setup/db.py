@@ -1,10 +1,38 @@
 #This module will setup all the databases
 #tables etc for the different pages.
 import sqlite3
+DB_PATHS = "./dbs/"
 
+
+def xssTables(overwrite = False):
+	print('Checking the COMMENTS table')
+	conn = sqlite3.connect(DB_PATHS + 'xss.db')
+	cursor = conn.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='COMMENTS';")
+	if ((not cursor.fetchone()) or overwrite == True):
+		conn.execute("DROP TABLE IF EXISTS COMMENTS")
+		print("Creating the table COMMENTS")
+		conn.execute('''CREATE TABLE IF NOT EXISTS COMMENTS
+					(ID         INT PRIMARY KEY NOT NULL,
+					NAME        TEXT            NOT NULL,
+					COMMENT     TEXT            NOT NULL,
+					DATECREATED INT             NOT NULL, 
+					PARENT_ID   INT);''')
+		conn.execute("INSERT INTO COMMENTS (ID, NAME, COMMENT, DATECREATED, PARENT_ID) \
+					VALUES (1, 'Zaphod', 'Hello all you vulnerable peeps', '2016-01-01 12:00:00', Null)")
+		conn.execute("INSERT INTO COMMENTS (ID, NAME, COMMENT, DATECREATED, PARENT_ID) \
+					VALUES (2, 'The Guide', ' The best drink in existence is the Pan Galactic Gargle Blaster. It says that the effect of a Pan Galactic Gargle Blaster is like having your brains smashed out by a slice of lemon wrapped round a large gold brick.', '2016-01-01 12:20:00', Null)")
+		conn.execute("INSERT INTO COMMENTS (ID, NAME, COMMENT, DATECREATED, PARENT_ID) \
+					VALUES (3, 'Ford', 'I''ll take 6', '2016-01-01 12:21:00', 2)")
+		conn.execute("INSERT INTO COMMENTS (ID, NAME, COMMENT, DATECREATED, PARENT_ID) \
+					VALUES (4, 'Marvin', 'You would', '2016-01-01 12:22:00', 3)")
+		conn.commit()
+	conn.close
+	print("Comments should be good to go")
+
+#setup the tables and data for the simple sql injection page
 def simpleInjection(overwrite=False):
 	print('Checking SimpleInjection')
-	conn = sqlite3.connect('simpleInjection.db')
+	conn = sqlite3.connect(DB_PATHS + 'simpleInjection.db')
 	cursor = conn.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='SEARCH';")
 	if ((not cursor.fetchone()) or overwrite == True):
 		conn.execute("DROP TABLE IF EXISTS SEARCH")
@@ -35,3 +63,4 @@ def simpleInjection(overwrite=False):
 
 def run(overwrite=False):
 	simpleInjection(overwrite)
+	xssTables(overwrite)
