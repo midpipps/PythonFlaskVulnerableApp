@@ -107,3 +107,10 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+
+
+#vscode ignore
+.vscode
+
+#sqlite DB file
+*.db

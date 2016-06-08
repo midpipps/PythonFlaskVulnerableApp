@@ -1,61 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
- 
-<head>
-    <title>Python Flask Bucket List App</title>
-    <link href="/static/css/bootstrap.css" rel="stylesheet">
-</head>
- 
-<body>
- 
-    <div class="container">
-        <div class="header">
-            <nav>
-                <ul class="nav nav-pills pull-right">
-                    <li role="presentation" class="active"><a href="/">Home</a>
-                    </li>
-                </ul>
-            </nav>
-            <h3 class="text-muted">Darn Vulnerable Flask App</h3>
-        </div>
- 
-        <div class="row marketing">
-            <div class="col-lg-6">
-                <h4>XSS</h4>
-                <ul class="nav">
-					<li><a href="/xss/reflected/">Reflected XSS</a></li>
-					<li><a href="/xss/stored/">Stored XSS</a></li>
-				</ul>
-            </div>
- 
-            <div class="col-lg-6">
-                <h4>SQL Injection</h4>
-                <ul class="nav">
-					<li><a href="/sqli/simple/">Simple SQL Injection</a></li>
-					<li><a href="/sqli/intermediate/">Intermediate SQL Injection</a></li>
-					<li><a href="/sqli/blind/">Blind SQL Injection</a></li>
-				</ul>
-            </div>
-			
-			<div class="col-lg-6">
-                <h4>File</h4>
-                <ul class="nav">
-					<li><a href="/file/traversal/">File Path Traversal</a></li>
-					<li><a href="/file/upload-open/">File Upload</a></li>
-					<li><a href="/file/upload-norunnable/">File Upload Exe, DLL, Powershell, etc.</a></li>
-					<li><a href="/file/text-only/">File Upload Text Only</a></li>
-				</ul>
-            </div>
-			
-			<div class="col-lg-6">
-                <h4>Execution</h4>
-                <ul class="nav">
-					<li><a href="/execution/simple/">Simple Execution</a></li>
-					<li><a href="/execution/intermediate/">Intermediate Execution</a></li>
-				</ul>
-            </div>
-        </div>
-    </div>
-</body>
- 
-</html>
+{% extends "basetemplate.html" %}
+{% block title %}Home - {% endblock %}
+{% block head %}
+    {{ super() }}
+{% endblock %}
+{% block content %}
+    <h1>Home</h1>
+    <p>
+        This is a simple app to test security tools and practice on.  Choose one of the types from the links above and have fun.
+    </p>
+{% endblock %}
+{% block footer %}
+    {{ super() }}
+{% endblock %}
+{% block scripts %}
+    {{ super() }}
+{% endblock %}
