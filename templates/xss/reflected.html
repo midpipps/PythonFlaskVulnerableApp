@@ -1,0 +1,27 @@
+{% extends "basetemplate.html" %}
+{% block title %}Reflected XSS - {% endblock %}
+{% block head %}
+    {{ super() }}
+{% endblock %}
+{% block content %}
+    <h1>Reflected XSS</h1>
+    <p>
+        <form method="POST" target="">
+            <div class="form-group">
+                <input type="text" placeholder="Name" id="name" name="name" class="form-control" value="{{(name | safe ) if name else ''}}" />
+            </div>
+            <button type="submit" class="btn btn-success">Say my name</button>
+        </form>
+    </p>
+    {% if name %}
+    <p>
+        Your name is {{ name | safe}}
+    </p>
+    {% endif %}
+{% endblock %}
+{% block footer %}
+    {{ super() }}
+{% endblock %}
+{% block scripts %}
+    {{ super() }}
+{% endblock %}
