@@ -2,17 +2,17 @@
 {% macro recursiveComments(comments, id=0, depth=0)%}
     {% if comments %}
         {% for comment in comments | commentCut(id) %}
-            <div>
-                <p>
-                    {{ depth }}
-                </p>
-                <h3>{{ comment[1] | safe }}</h3>
-                <h4>{{ comment[3] | safe }}</h4>
-                <p>
-                    {{ comment[2] | safe }}
-                </p>
+            <div class="row">
+                <div class="col-xs-6 col-xs-offset-{{ depth }}">
+                    <h3>{{ comment[1] | safe }}</h3>
+                    <h4>{{ comment[3] | safe }}</h4>
+                    <p>
+                        {{ comment[2] | safe }}
+                    </p>
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#replyModal" data-postid="{{ comment[0] }}">Reply</button>
+                </div>
+                {{ recursiveComments(comments, comment[0], depth + 1) }}
             </div>
-            {{ recursiveComments(comments, comment[0], depth + 1) }}
         {% endfor %}
 
     {% endif %}
@@ -24,26 +24,53 @@
     {{ super() }}
 {% endblock %}
 {% block content %}
-    <h1>Stored XSS - Comments</h1>
-    <div>
-        {{ recursiveComments(comments,0,0) }}
-    </div>
-
-    <p>
-        <form method="POST" target="">
-            <div class="form-group">
-                <input type="text" placeholder="Name" id="name" name="name" class="form-control" value="" />
+    <form method="POST" target="">
+        <div class="modal fade" id="replyModal">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title">Reply</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <input type="text" placeholder="Name" id="name" name="name" class="form-control" value="" />
+                        </div>
+                        <div class="form-group">
+                            <input type="text" placeholder="Comment" id="comment" name="comment" class="form-control" value="" />
+                        </div>
+                        <input type="hidden" name="parentID"/>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <input type="submit" class="btn btn-primary" value="Save Reply" name="saveReply"></button>
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <input type="text" placeholder="Comment" id="comment" name="comment" class="form-control" value="" />
-            </div>
-            <button type="submit" class="btn btn-success">Save Comment</button>
-        </form>
-    </p>
+        </div>
+        <h1>Stored XSS - Comments</h1>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#replyModal" data-postid="0">New Post</button>
+        <div class="row">
+            {{ recursiveComments(comments,0,0) }}
+        </div>
+    </form>
 {% endblock %}
 {% block footer %}
     {{ super() }}
 {% endblock %}
 {% block scripts %}
     {{ super() }}
+    <script type="text/javascript">
+        //triggered when modal is about to be shown
+        $('#replyModal').on('show.bs.modal', function(e) {
+
+            //get data-id attribute of the clicked element
+            var postID = $(e.relatedTarget).data('postid');
+            console.log(postID)
+            //populate the textbox
+            $(e.currentTarget).find('input[name="parentID"]').val(postID);
+        });
+    </script>
 {% endblock %}

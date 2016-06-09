@@ -1,4 +1,6 @@
 import sqlite3
+import logging
+
 SQLI_DB_NAME = "simpleInjection.db"
 sqli_db_path = None
 #setup the tables and data for the simple sql injection page
@@ -6,12 +8,12 @@ def create(db_path, overwrite=False):
 	global xss_db_path
 	sqli_db_path = db_path + SQLI_DB_NAME
 
-	print('Checking SimpleInjection')
+	logging.info('Checking SimpleInjection')
 	conn = sqlite3.connect(sqli_db_path)
 	cursor = conn.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='SEARCH';")
 	if ((not cursor.fetchone()) or overwrite == True):
 		conn.execute("DROP TABLE IF EXISTS SEARCH")
-		print("Creating the table SEARCH")
+		logging.info("Creating the table SEARCH")
 		conn.execute('''CREATE TABLE IF NOT EXISTS SEARCH
 					(ID         INT PRIMARY KEY NOT NULL,
 					NAME        TEXT            NOT NULL,
@@ -19,7 +21,7 @@ def create(db_path, overwrite=False):
 					DATECREATED INT             NOT NULL,
 					SECRET      TEXT            NOT NULL,
 					DISPLAY     INT             NOT NULL);''')
-		print("Adding in some data to  SEARCH")
+		logging.info("Adding in some data to  SEARCH")
 		conn.execute("INSERT INTO SEARCH (ID, NAME, COMMENT, DATECREATED, SECRET, DISPLAY) \
 					VALUES (1, 'Marvin1', 'You can blame the Sirius Cybernetics Corporation for making androids with GPP', '2016-01-01 12:00:00', 'Sureasecret', 1)")
 		conn.execute("INSERT INTO SEARCH (ID, NAME, COMMENT, DATECREATED, SECRET, DISPLAY) \
@@ -34,4 +36,4 @@ def create(db_path, overwrite=False):
 					VALUES (6, 'SecretUser', 'HAHAHA You can''t see me', '2014-08-16 12:00:00', '44af595c-1b56-400d-951e-8407249c8446', 0)")
 		conn.commit()
 	conn.close()
-	print('SimpleInjection should be good to go')
+	logging.info('SimpleInjection should be good to go')
