@@ -114,3 +114,6 @@ $RECYCLE.BIN/
 
 #sqlite DB file
 *.db
+
+#python virtual environment
+venv

@@ -1,0 +1,49 @@
+{#HACKY BUT WORKS#}
+{% macro recursiveComments(comments, id=0, depth=0)%}
+    {% if comments %}
+        {% for comment in comments | commentCut(id) %}
+            <div>
+                <p>
+                    {{ depth }}
+                </p>
+                <h3>{{ comment[1] | safe }}</h3>
+                <h4>{{ comment[3] | safe }}</h4>
+                <p>
+                    {{ comment[2] | safe }}
+                </p>
+            </div>
+            {{ recursiveComments(comments, comment[0], depth + 1) }}
+        {% endfor %}
+
+    {% endif %}
+{% endmacro%}
+
+{% extends "basetemplate.html" %}
+{% block title %}Stored XSS - {% endblock %}
+{% block head %}
+    {{ super() }}
+{% endblock %}
+{% block content %}
+    <h1>Stored XSS - Comments</h1>
+    <div>
+        {{ recursiveComments(comments,0,0) }}
+    </div>
+
+    <p>
+        <form method="POST" target="">
+            <div class="form-group">
+                <input type="text" placeholder="Name" id="name" name="name" class="form-control" value="" />
+            </div>
+            <div class="form-group">
+                <input type="text" placeholder="Comment" id="comment" name="comment" class="form-control" value="" />
+            </div>
+            <button type="submit" class="btn btn-success">Save Comment</button>
+        </form>
+    </p>
+{% endblock %}
+{% block footer %}
+    {{ super() }}
+{% endblock %}
+{% block scripts %}
+    {{ super() }}
+{% endblock %}
