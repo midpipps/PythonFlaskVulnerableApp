@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for
 from setup.db import db, xss
 import logging
 from logging import StreamHandler
@@ -7,6 +7,11 @@ app = Flask(__name__)
 @app.route('/')
 def index():
     return render_template('index.html')
+
+@app.route('/reset/')
+def reset():
+    db.create(True)
+    return redirect(url_for('index'))
 
 @app.route('/xss/reflected/', methods=['GET', 'POST'])
 def xss_reflected():

@@ -14,7 +14,6 @@
                 {{ recursiveComments(comments, comment[0], depth + 1) }}
             </div>
         {% endfor %}
-
     {% endif %}
 {% endmacro%}
 
@@ -51,8 +50,9 @@
             </div>
         </div>
         <h1>Stored XSS - Comments</h1>
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#replyModal" data-postid="0">New Post</button>
+        
         <div class="row">
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#replyModal" data-postid="0">New Post</button>
             {{ recursiveComments(comments,0,0) }}
         </div>
     </form>
