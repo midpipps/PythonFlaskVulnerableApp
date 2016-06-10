@@ -1,0 +1,35 @@
+{% extends "basetemplate.html" %}
+{% block title %}Simple SQL Injection - {% endblock %}
+{% block head %}
+    {{ super() }}
+{% endblock %}
+{% block content %}
+    <h1>Simple SQL Injection</h1>
+    <p>
+        <form method="POST" target="">
+            <div class="form-group">
+                <input type="text" placeholder="Search" id="search" name="search" class="form-control" value="{{ search if search else ''}}" />
+            </div>
+            <button type="submit" class="btn btn-success">Search</button>
+        </form>
+    </p>
+	{% if comments %}
+        {% for comment in comments %}
+            <div class="row">
+                <div class="col-xs-6">
+                    <h3>{{ comment[1] }}</h3>
+                    <h4>{{ comment[3] }}</h4>
+                    <p>
+                        {{ comment[2] }}
+                    </p>
+                </div>
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endblock %}
+{% block footer %}
+    {{ super() }}
+{% endblock %}
+{% block scripts %}
+    {{ super() }}
+{% endblock %}
