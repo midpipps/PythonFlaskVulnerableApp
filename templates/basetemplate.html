@@ -78,6 +78,9 @@
             </div><!-- /.container-fluid -->
         </nav>
         <div id="content">
+            <h3>Instructions</h3>
+            {% block instructions %}{% endblock %}
+            <hr />
             {% block content %}{% endblock %}
         </div>
         <div id="footer">

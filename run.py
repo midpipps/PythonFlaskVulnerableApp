@@ -49,11 +49,10 @@ def xss_stored():
 @app.route('/sqli/simple/', methods=['GET', 'POST'])
 def sqli_simple():
     comments = None
-    search = None
+    search = ''
     if request.method == 'POST':
         search = request.form['search']
-    if search:
-        comments = sqlinjection.search(search)
+    comments = sqlinjection.search(search)
     return render_template('./sqli/simple.html', comments = comments, search = search)
 #**************
 #End SQLI Routes
