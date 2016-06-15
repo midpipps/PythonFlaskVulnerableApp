@@ -1,0 +1,37 @@
+{% extends "basetemplate.html" %}
+{% block title %}Simple File Traversal - {% endblock %}
+{% block head %}
+    {{ super() }}
+{% endblock %}
+{% block instructions %}
+	<p>
+		There is a file traversal vulnerability on this page.
+	</p>
+{% endblock %}
+{% block content %}
+    <h1>Simple File Traversal</h1>
+    <div class="row">
+        {% if results %}
+            {% for dir in results[0] %}
+                <div class="row">
+                    <div class="col-xs-6">
+                        <a href="/file/traversal/?path={{ path }}/{{ dir }}"><span class="glyphicon glyphicon-folder-close" aria-hidden="true"></span>{{ dir }}</a>
+                    </div>
+                </div>
+            {% endfor %}
+            {% for file in results[1] %}
+                <div class="row">
+                    <div class="col-xs-6">
+                        <a href="/file/traversal/?path={{ path }}&file={{ file }}"><span class="glyphicon glyphicon-file" aria-hidden="true"></span>{{ file }}</a>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+{% endblock %}
+{% block footer %}
+    {{ super() }}
+{% endblock %}
+{% block scripts %}
+    {{ super() }}
+{% endblock %}

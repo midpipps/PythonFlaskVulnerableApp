@@ -1,6 +1,8 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, send_from_directory, request, redirect, url_for
 from setup.db import db, xss, sqlinjection
+from setup.file import fileaccess
 import logging
+import os
 from logging import StreamHandler
 app = Flask(__name__)
 
@@ -27,7 +29,7 @@ def xss_reflected():
     name=None
     if (request.values.get('name')):
         name = request.values['name']
-    return render_template('./xss/reflected.html', name=name)
+    return render_template('./xss/reflected.html', name = name)
 
 @app.route('/xss/stored/', methods=['GET', 'POST'])
 def xss_stored():
@@ -38,7 +40,7 @@ def xss_stored():
         if name and comment:
             xss.addComment(name, comment, parentID)
     all_rows = xss.getComments()
-    return render_template('./xss/stored.html', comments=all_rows)
+    return render_template('./xss/stored.html', comments = all_rows)
 #**************
 #End XSS Routes
 #**************
@@ -57,6 +59,30 @@ def sqli_simple():
 #**************
 #End SQLI Routes
 #**************
+
+#**************
+#File Routes
+#**************
+@app.route('/file/traversal/', methods=['GET'])
+def file_traversal():
+    current_path = fileaccess.os_getuploadspath()
+    entered_path = ""
+    file = None
+    results = None
+    if (request.values.get('path')):
+        entered_path = request.values.get('path')
+        current_path = os.path.join(current_path, *(entered_path.replace('\\', '/').split("/")))
+    if (request.values.get('file')):
+        file = request.values.get('file')
+        if (fileaccess.os_fileexists(current_path, file)):
+            return send_from_directory(current_path, file)
+    results = fileaccess.os_getfilesandfolders(current_path)
+    return render_template('./files/traversal.html', path = entered_path, results = results, file = file)
+
+#**************
+#End File Routes
+#**************
+
 
 #**************
 #Filters
