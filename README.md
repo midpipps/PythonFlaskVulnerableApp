@@ -2,6 +2,9 @@
 This is going to be a simple Python web server with some simple vulnerabilities.
 
 
+This is going to be running on your computer so tread carefully when running exploits that you don't understand.  This is an exploitable application so be sure to take proper precautions when running it on your computer.
+
+
 The goal of this project is to make a python web server that could be easily downloaded and ran for practice/testing/tool trials that
 does not require the user to spin up a whole web server or anything special such as that it is going to be its own little module.
 
@@ -10,7 +13,7 @@ Current Vulnerabilities in the system and planned:
 - [x] Stored XSS
 - [x] Simple SQL Injection
 - [ ] Blind SQL Injection
-- [ ] File Path Traversal
+- [x] File Path Traversal
 - [ ] File Upload/Download
 - [ ] Shell execution
 
