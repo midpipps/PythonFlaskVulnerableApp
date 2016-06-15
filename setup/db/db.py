@@ -5,5 +5,5 @@ import setup.db.xss
 DB_PATHS = "./dbs/"
 
 def create(overwrite=False):
-	setup.db.sqlinjection.create(DB_PATHS, overwrite)
-	setup.db.xss.create(DB_PATHS, overwrite)
+    setup.db.sqlinjection.create(DB_PATHS, overwrite)
+    setup.db.xss.create(DB_PATHS, overwrite)

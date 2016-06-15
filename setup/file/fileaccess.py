@@ -17,4 +17,4 @@ def os_getuploadspath():
     return os.path.join(tempbasepath, *("static", "uploads"))
 
 def os_fileexists(folder, file):
-        return os.path.isfile(os.path.join(folder, file))
+    return os.path.isfile(os.path.join(folder, file))

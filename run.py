@@ -1,6 +1,7 @@
 from flask import Flask, render_template, send_from_directory, request, redirect, url_for
 from setup.db import db, xss, sqlinjection
 from setup.file import fileaccess
+from setup.execution import execute
 import logging
 import os
 from logging import StreamHandler
@@ -78,11 +79,24 @@ def file_traversal():
             return send_from_directory(current_path, file)
     results = fileaccess.os_getfilesandfolders(current_path)
     return render_template('./files/traversal.html', path = entered_path, results = results, file = file)
-
 #**************
 #End File Routes
 #**************
 
+#**************
+# Execution Routes
+#**************
+@app.route('/execution/simple/', methods=['GET', 'POST'])
+def execution_simple():
+    ip = None
+    results = None
+    if request.method == 'POST':
+        ip = request.form['ip']
+        results = execute.execute_ping(ip)
+    return render_template('./execution/simple.html', ip = ip, results = results)
+#**************
+#End Execution Routes
+#**************
 
 #**************
 #Filters

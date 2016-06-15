@@ -1,0 +1,38 @@
+{% extends "basetemplate.html" %}
+{% block title %}Simple Execution - {% endblock %}
+{% block head %}
+    {{ super() }}
+{% endblock %}
+{% block instructions %}
+    <p>
+        There is a program execution vulnerability on this page.  If you want an example of running your own code using this mix this with the file upload scripts in the file pages.
+    </p>
+{% endblock %}
+{% block content %}
+    <h1>Simple Execution</h1>
+    <p>
+        <form method="POST" target="">
+            <div class="form-group">
+                <input type="text" placeholder="IP to Ping" id="ip" name="ip" class="form-control" value="{{ ip if ip else ''}}" />
+            </div>
+            <button type="submit" class="btn btn-success">Ping</button>
+        </form>
+    </p>
+    {% if results %}
+        <div class="row">
+            <div class="col-xs-6">
+                <br /><br />
+                <h3>Results:</h3>
+                {% for result in results %}
+                    {{ result }}<br />
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}
+{% block footer %}
+    {{ super() }}
+{% endblock %}
+{% block scripts %}
+    {{ super() }}
+{% endblock %}

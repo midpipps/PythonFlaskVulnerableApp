@@ -4,9 +4,9 @@
     {{ super() }}
 {% endblock %}
 {% block instructions %}
-	<p>
-		There is an sql injection in this search there are a couple of hidden posts and a secret post.  See if you can get all the information including the secrets.
-	</p>
+    <p>
+        There is an sql injection in this search there are a couple of hidden posts and a secret post.  See if you can get all the information including the secrets.
+    </p>
 {% endblock %}
 {% block content %}
     <h1>Simple SQL Injection</h1>
@@ -18,7 +18,7 @@
             <button type="submit" class="btn btn-success">Search</button>
         </form>
     </p>
-	{% if comments %}
+    {% if comments %}
         <table class="table">
             <thead class="thead-inverse">
                 <tr>
