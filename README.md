@@ -15,7 +15,7 @@ Current Vulnerabilities in the system and planned:
 - [ ] Blind SQL Injection
 - [x] File Path Traversal
 - [ ] File Upload/Download
-- [ ] Shell execution
+- [x] Shell execution
 
 Always open to suggestions on any that you would like to see.
 

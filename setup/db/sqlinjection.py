@@ -40,7 +40,8 @@ def create(db_path, overwrite=False):
 
 def search(search):
     conn = sqlite3.connect(sqli_db_path)
+    sql_string = "SELECT ID, NAME, PHONE, DATECREATED FROM SEARCH WHERE DISPLAY <> 0 AND NAME LIKE '%" + search + "%' ORDER BY ID"
     cursor = conn.execute("SELECT ID, NAME, PHONE, DATECREATED FROM SEARCH WHERE DISPLAY <> 0 AND NAME LIKE '%" + search + "%' ORDER BY ID")
-    all_rows = cursor.fetchall()
+    all_rows = (sql_string, cursor.fetchall())
     conn.close()
     return all_rows

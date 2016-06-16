@@ -1,0 +1,47 @@
+{% extends "basetemplate.html" %}
+{% block title %}Simple SQL Injection with Escaping - {% endblock %}
+{% block head %}
+    {{ super() }}
+{% endblock %}
+{% block instructions %}
+    <p>
+        This is the same as the simple injection except the programmer has gotten tricky and is now escaping some characters.
+    </p>
+{% endblock %}
+{% block content %}
+    <h1>Simple SQL Injection</h1>
+    <p>
+        <form method="POST" target="">
+            <div class="form-group">
+                <input type="text" placeholder="Search Name" id="search" name="search" class="form-control" value="{{ search if search else ''}}" />
+            </div>
+            <button type="submit" class="btn btn-success">Search</button>
+        </form>
+    </p>
+    {% if comments %}
+        <table class="table">
+            <thead class="thead-inverse">
+                <tr>
+                    <th>Name</th>
+                    <th>Phone #</th>
+                    <th>Date Joined</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for comment in comments %}
+                    <tr>
+                        <td>{{ comment[1] }}</td>
+                        <td>{{ comment[2] }}</td>
+                        <td>{{ comment[3] }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+{% endblock %}
+{% block footer %}
+    {{ super() }}
+{% endblock %}
+{% block scripts %}
+    {{ super() }}
+{% endblock %}

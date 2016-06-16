@@ -56,7 +56,17 @@ def sqli_simple():
     if request.method == 'POST':
         search = request.form['search']
     comments = sqlinjection.search(search)
-    return render_template('./sqli/simple.html', comments = comments, search = search)
+    return render_template('./sqli/simple.html', comments = comments[1], search = search, sqlquery = comments[0])
+
+@app.route('/sqli/simpleescape/', methods=['GET', 'POST'])
+def sqli_simpleescape():
+    comments = None
+    search = ''
+    if (request.method == 'POST'):
+        search = request.form['search']
+        search = search.replace(";--", " ")
+    comments = sqlinjection.search(search)
+    return render_template('./sqli/simpleescape.html', comments = comments[1], search = search, sqlquery = comments[0])
 #**************
 #End SQLI Routes
 #**************
