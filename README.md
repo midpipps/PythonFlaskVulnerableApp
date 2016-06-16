@@ -12,7 +12,7 @@ Current Vulnerabilities in the system and planned:
 - [x] Reflected XSS
 - [x] Stored XSS
 - [x] Simple SQL Injection
-- [ ] Blind SQL Injection
+- [x] Blind SQL Injection
 - [x] File Path Traversal
 - [ ] File Upload/Download
 - [x] Shell execution
