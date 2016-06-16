@@ -1,4 +1,4 @@
-from flask import Flask, render_template, send_from_directory, request, redirect, url_for
+from flask import Flask, render_template, send_from_directory, request, redirect, url_for, flash
 from setup.db import db, xss, sqlinjection
 from setup.file import fileaccess
 from setup.execution import execute
@@ -6,6 +6,7 @@ import logging
 import os
 from logging import StreamHandler
 app = Flask(__name__)
+app.secret_key = 'someSecret'
 
 #**************
 #Misc Routes
@@ -67,6 +68,24 @@ def sqli_simpleescape():
         search = search.replace(";--", " ")
     comments = sqlinjection.search(search)
     return render_template('./sqli/simpleescape.html', comments = comments[1], search = search, sqlquery = comments[0])
+
+@app.route('/sqli/blind/', methods=['GET', 'POST'])
+def sqli_blind():
+    name = None
+    phone = None
+    secret = None
+    display = 1
+    if (request.method == 'POST'):
+        name = request.form['name']
+        phone = request.form['phone']
+        secret = request.form['secret']
+        if (name and phone and secret and display):
+            flash('Your submission has been saved.', 'success')
+            sqlinjection.search_insert(name, phone, secret)
+        else:
+            flash('Make sure you are filling out all the fields', 'error')
+    return render_template('./sqli/blindinjection.html', name = name, phone = phone, secret = secret, display = display)
+
 #**************
 #End SQLI Routes
 #**************

@@ -1,0 +1,51 @@
+{% extends "basetemplate.html" %}
+{% block title %}Simple Blind SQL Injection - {% endblock %}
+{% block head %}
+    {{ super() }}
+{% endblock %}
+{% block instructions %}
+    <p>
+        This sql injection is there it just will not return you results to let you know that it is working.  But there are many ways to make sure it actually is.
+    </p>
+{% endblock %}
+{% block content %}
+    <h1>Simple SQL Injection</h1>
+    {% with errors = get_flashed_messages(category_filter=["error"]) %}
+        {% if errors %}
+        <div class="alert alert-danger">
+            {%- for msg in errors %}
+                {{ msg }}
+            {% endfor -%}
+        </div>
+        {% endif %}
+    {% endwith %}
+    {% with success = get_flashed_messages(category_filter=["success"]) %}
+        {% if success %}
+        <div class="alert alert-success">
+            {%- for msg in success %}
+                {{ msg }}
+            {% endfor -%}
+        </div>
+        {% endif %}
+    {% endwith %}
+    <p>
+        <form method="POST" target="">
+            <div class="form-group">
+                <input type="text" placeholder="Name" id="name" name="name" class="form-control" value="{{ name if name else ''}}" />
+            </div>
+            <div class="form-group">
+                <input type="text" placeholder="Phone" id="phone" name="phone" class="form-control" value="{{ phone if phone else ''}}" />
+            </div>
+            <div class="form-group">
+                <input type="text" placeholder="Secret" id="secret" name="secret" class="form-control" value="{{ secret if secret else ''}}" />
+            </div>
+            <button type="submit" class="btn btn-success">Search</button>
+        </form>
+    </p>
+{% endblock %}
+{% block footer %}
+    {{ super() }}
+{% endblock %}
+{% block scripts %}
+    {{ super() }}
+{% endblock %}

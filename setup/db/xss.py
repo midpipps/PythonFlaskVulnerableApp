@@ -18,14 +18,14 @@ def create(db_path, overwrite = False):
                     COMMENT     TEXT            NOT NULL,
                     DATECREATED INT             NOT NULL, 
                     PARENT_ID   INT             NOT NULL);''')
-        conn.execute("INSERT INTO COMMENTS (ID, NAME, COMMENT, DATECREATED, PARENT_ID) \
-                    VALUES (1, 'Zaphod', 'Hello all you vulnerable peeps', '2016-01-01 12:00:00', 0)")
-        conn.execute("INSERT INTO COMMENTS (ID, NAME, COMMENT, DATECREATED, PARENT_ID) \
-                    VALUES (2, 'The Guide', ' The best drink in existence is the Pan Galactic Gargle Blaster. It says that the effect of a Pan Galactic Gargle Blaster is like having your brains smashed out by a slice of lemon wrapped round a large gold brick.', '2016-01-01 12:20:00', 0)")
-        conn.execute("INSERT INTO COMMENTS (ID, NAME, COMMENT, DATECREATED, PARENT_ID) \
-                    VALUES (3, 'Ford', 'I''ll take 6', '2016-01-01 12:21:00', 2)")
-        conn.execute("INSERT INTO COMMENTS (ID, NAME, COMMENT, DATECREATED, PARENT_ID) \
-                    VALUES (4, 'Marvin', 'You would', '2016-01-01 12:22:00', 3)")
+        conn.execute("INSERT INTO COMMENTS (NAME, COMMENT, DATECREATED, PARENT_ID) \
+                    VALUES ('Zaphod', 'Hello all you vulnerable peeps', '2016-01-01 12:00:00', 0)")
+        conn.execute("INSERT INTO COMMENTS (NAME, COMMENT, DATECREATED, PARENT_ID) \
+                    VALUES ('The Guide', ' The best drink in existence is the Pan Galactic Gargle Blaster. It says that the effect of a Pan Galactic Gargle Blaster is like having your brains smashed out by a slice of lemon wrapped round a large gold brick.', '2016-01-01 12:20:00', 0)")
+        conn.execute("INSERT INTO COMMENTS (NAME, COMMENT, DATECREATED, PARENT_ID) \
+                    VALUES ('Ford', 'I''ll take 6', '2016-01-01 12:21:00', 2)")
+        conn.execute("INSERT INTO COMMENTS (NAME, COMMENT, DATECREATED, PARENT_ID) \
+                    VALUES ('Marvin', 'You would', '2016-01-01 12:22:00', 3)")
         conn.commit()
     conn.close
     logging.info("Comments should be good to go")
