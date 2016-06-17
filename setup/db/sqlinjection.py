@@ -39,15 +39,23 @@ def search_insert(name, phone, secret, display = 1, dt = "DATETIME('now')", conn
         conn.commit()
     else:
         conn = sqlite3.connect(sqli_db_path)
-        conn.execute(sql_string)
-        conn.commit()
-        conn.close()
+        try:
+            conn.execute(sql_string)
+            conn.commit()
+        finally:
+            conn.close()
+        
+        
+        
 
 
 def search(search):
+    all_rows = list()
     conn = sqlite3.connect(sqli_db_path)
     sql_string = "SELECT ID, NAME, PHONE, DATECREATED FROM SEARCH WHERE DISPLAY <> 0 AND NAME LIKE '%" + search + "%' ORDER BY ID"
-    cursor = conn.execute(sql_string)
-    all_rows = (sql_string, cursor.fetchall())
-    conn.close()
+    try:
+        cursor = conn.execute(sql_string)
+        all_rows = (sql_string, cursor.fetchall())
+    finally:
+        conn.close()
     return all_rows

@@ -18,15 +18,10 @@ def create(db_path, overwrite = False):
                     COMMENT     TEXT            NOT NULL,
                     DATECREATED INT             NOT NULL, 
                     PARENT_ID   INT             NOT NULL);''')
-        conn.execute("INSERT INTO COMMENTS (NAME, COMMENT, DATECREATED, PARENT_ID) \
-                    VALUES ('Zaphod', 'Hello all you vulnerable peeps', '2016-01-01 12:00:00', 0)")
-        conn.execute("INSERT INTO COMMENTS (NAME, COMMENT, DATECREATED, PARENT_ID) \
-                    VALUES ('The Guide', ' The best drink in existence is the Pan Galactic Gargle Blaster. It says that the effect of a Pan Galactic Gargle Blaster is like having your brains smashed out by a slice of lemon wrapped round a large gold brick.', '2016-01-01 12:20:00', 0)")
-        conn.execute("INSERT INTO COMMENTS (NAME, COMMENT, DATECREATED, PARENT_ID) \
-                    VALUES ('Ford', 'I''ll take 6', '2016-01-01 12:21:00', 2)")
-        conn.execute("INSERT INTO COMMENTS (NAME, COMMENT, DATECREATED, PARENT_ID) \
-                    VALUES ('Marvin', 'You would', '2016-01-01 12:22:00', 3)")
-        conn.commit()
+        addComment('Zaphod', 'Hello all you vulnerable peeps', 0, "'2016-01-01 12:00:00'", conn)
+        addComment('The Guide', ' The best drink in existence is the Pan Galactic Gargle Blaster. It says that the effect of a Pan Galactic Gargle Blaster is like having your brains smashed out by a slice of lemon wrapped round a large gold brick.', 0, "'2016-01-01 12:20:00'", conn)
+        addComment('Ford', 'I''ll take 6', 2, "'2016-01-01 12:21:00'", conn)
+        addComment('Marvin', 'You would', 3, "'2016-01-01 12:22:00'", conn)
     conn.close
     logging.info("Comments should be good to go")
 
@@ -37,8 +32,13 @@ def getComments():
     conn.close()
     return all_rows
 
-def addComment(name, comment, parentID):
-    conn = sqlite3.connect(xss_db_path)
-    conn.execute("INSERT INTO COMMENTS (NAME, COMMENT, DATECREATED, PARENT_ID) VALUES (?, ?, DATETIME('now'), ?)", (name, comment, parentID))
-    conn.commit()
-    conn.close
+def addComment(name, comment, parentID, dt = "DATETIME('now')", conn = None):
+    sqlstring = "INSERT INTO COMMENTS (NAME, COMMENT, DATECREATED, PARENT_ID) VALUES (?, ?, DATETIME('now'), ?)"
+    if (conn):
+        conn.execute(sqlstring, (name, comment, parentID))
+        conn.commit()
+    else:
+        conn = sqlite3.connect(xss_db_path)
+        conn.execute(sqlstring, (name, comment, parentID))
+        conn.commit()
+        conn.close
