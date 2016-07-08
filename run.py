@@ -3,7 +3,6 @@ The start of the application has all the routes and the app invocation
 '''
 import os
 import logging
-from logging import StreamHandler
 from flask import Flask, render_template, send_from_directory, request, redirect, url_for, flash
 from setup.db import db, xss, sqlinjection
 from setup.file import fileaccess
