@@ -1,22 +1,33 @@
+'''
+The start of the application has all the routes and the app invocation
+'''
+import os
+import logging
+from logging import StreamHandler
 from flask import Flask, render_template, send_from_directory, request, redirect, url_for, flash
 from setup.db import db, xss, sqlinjection
 from setup.file import fileaccess
 from setup.execution import execute
-import logging
-import os
-from logging import StreamHandler
-app = Flask(__name__)
-app.secret_key = 'someSecret'
+
+APP = Flask(__name__)
+APP.secret_key = 'someSecret'
+
 
 #**************
 #Misc Routes
 #**************
-@app.route('/')
+@APP.route('/')
 def index():
+    '''
+    Route handler for the home page
+    '''
     return render_template('index.html')
 
-@app.route('/reset/')
+@APP.route('/reset/')
 def reset():
+    '''
+    Route handler page that resets the hole database
+    '''
     db.create(True)
     return redirect(url_for('index'))
 #**************
@@ -26,23 +37,29 @@ def reset():
 #*************
 #XSS Routes
 #*************
-@app.route('/xss/reflected/', methods=['GET', 'POST'])
+@APP.route('/xss/reflected/', methods=['GET', 'POST'])
 def xss_reflected():
-    name=None
-    if (request.values.get('name')):
+    '''
+    Route handler for the reflected cross site scripting
+    '''
+    name = None
+    if request.values.get('name'):
         name = request.values['name']
-    return render_template('./xss/reflected.html', name = name)
+    return render_template('./xss/reflected.html', name=name)
 
-@app.route('/xss/stored/', methods=['GET', 'POST'])
+@APP.route('/xss/stored/', methods=['GET', 'POST'])
 def xss_stored():
+    '''
+    Route handler for the stored cross site scripting
+    '''
     if request.method == 'POST':
         name = request.form['name']
         comment = request.form['comment']
-        parentID = request.form['parentID']
+        parentid = request.form['parentID']
         if name and comment:
-            xss.addComment(name, comment, parentID)
-    all_rows = xss.getComments()
-    return render_template('./xss/stored.html', comments = all_rows)
+            xss.addcomment(name, comment, parentid)
+    all_rows = xss.getcomments()
+    return render_template('./xss/stored.html', comments=all_rows)
 #**************
 #End XSS Routes
 #**************
@@ -50,41 +67,53 @@ def xss_stored():
 #**************
 #SQLI Routes
 #**************
-@app.route('/sqli/simple/', methods=['GET', 'POST'])
+@APP.route('/sqli/simple/', methods=['GET', 'POST'])
 def sqli_simple():
+    '''
+    Route handler for the simple sql injection
+    '''
     comments = None
     search = ''
     if request.method == 'POST':
         search = request.form['search']
     comments = sqlinjection.search(search)
-    return render_template('./sqli/simple.html', comments = comments[1], search = search, sqlquery = comments[0])
+    return render_template('./sqli/simple.html', comments=comments[1],
+                           search=search, sqlquery=comments[0])
 
-@app.route('/sqli/simpleescape/', methods=['GET', 'POST'])
+@APP.route('/sqli/simpleescape/', methods=['GET', 'POST'])
 def sqli_simpleescape():
+    '''
+    Route handler for the simple sql escape injection
+    '''
     comments = None
     search = ''
-    if (request.method == 'POST'):
+    if request.method == 'POST':
         search = request.form['search']
         search = search.replace(";--", " ")
     comments = sqlinjection.search(search)
-    return render_template('./sqli/simpleescape.html', comments = comments[1], search = search, sqlquery = comments[0])
+    return render_template('./sqli/simpleescape.html', comments=comments[1],
+                           search=search, sqlquery=comments[0])
 
-@app.route('/sqli/blind/', methods=['GET', 'POST'])
+@APP.route('/sqli/blind/', methods=['GET', 'POST'])
 def sqli_blind():
+    '''
+    Route handler for the Blind sql injection page
+    '''
     name = None
     phone = None
     secret = None
     display = 1
-    if (request.method == 'POST'):
+    if request.method == 'POST':
         name = request.form['name']
         phone = request.form['phone']
         secret = request.form['secret']
-        if (name and phone and secret and display):
+        if name and phone and secret and display:
             flash('Your submission has been saved.', 'success')
             sqlinjection.search_insert(name, phone, secret)
         else:
             flash('Make sure you are filling out all the fields', 'error')
-    return render_template('./sqli/blindinjection.html', name = name, phone = phone, secret = secret, display = display)
+    return render_template('./sqli/blindinjection.html', name=name, phone=phone,
+                           secret=secret, display=display)
 
 #**************
 #End SQLI Routes
@@ -93,21 +122,24 @@ def sqli_blind():
 #**************
 #File Routes
 #**************
-@app.route('/file/traversal/', methods=['GET'])
+@APP.route('/file/traversal/', methods=['GET'])
 def file_traversal():
-    current_path = fileaccess.os_getuploadspath()
+    '''
+    Route handler for the file traversal page
+    '''
+    current_path = fileaccess.fileaccess_getuploadspath()
     entered_path = ""
     file = None
     results = None
-    if (request.values.get('path')):
+    if request.values.get('path'):
         entered_path = request.values.get('path')
         current_path = os.path.join(current_path, *(entered_path.replace('\\', '/').split("/")))
-    if (request.values.get('file')):
+    if request.values.get('file'):
         file = request.values.get('file')
-        if (fileaccess.os_fileexists(current_path, file)):
+        if fileaccess.fileaccess_fileexists(current_path, file):
             return send_from_directory(current_path, file)
-    results = fileaccess.os_getfilesandfolders(current_path)
-    return render_template('./files/traversal.html', path = entered_path, results = results, file = file)
+    results = fileaccess.fileaccess_getfilesandfolders(current_path)
+    return render_template('./files/traversal.html', path=entered_path, results=results, file=file)
 #**************
 #End File Routes
 #**************
@@ -115,14 +147,17 @@ def file_traversal():
 #**************
 # Execution Routes
 #**************
-@app.route('/execution/simple/', methods=['GET', 'POST'])
+@APP.route('/execution/simple/', methods=['GET', 'POST'])
 def execution_simple():
-    ip = None
+    '''
+    Route handler for the execute simple page
+    '''
+    ip_address = None
     results = None
     if request.method == 'POST':
-        ip = request.form['ip']
-        results = execute.execute_ping(ip)
-    return render_template('./execution/simple.html', ip = ip, results = results)
+        ip_address = request.form['ip']
+        results = execute.execute_ping(ip_address)
+    return render_template('./execution/simple.html', ip=ip_address, results=results)
 #**************
 #End Execution Routes
 #**************
@@ -130,18 +165,22 @@ def execution_simple():
 #**************
 #Filters
 #**************
-@app.template_filter('commentCut')
-def commentCut(comments, id):
+@APP.template_filter('commentcut')
+def commentcut(comments, commentid):
+    '''
+    A filter used on the comments to get just
+    the comments that pertain to the id
+    '''
     if comments:
-        return (x for x in comments if x[4] == id)
+        return (x for x in comments if x[4] == commentid)
     return None
 #**************
 #End Filters
 #**************
 
-if __name__=='__main__':
+if __name__ == '__main__':
     logging.basicConfig(level=logging.DEBUG)
     logging.info("Starting db Creation")
     db.create(False)
     logging.info("DB creation script complete.\r\nStarting the server")
-    app.run(debug=True, host='0.0.0.0')
+    APP.run(debug=True, host='0.0.0.0')
