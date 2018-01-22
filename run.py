@@ -164,8 +164,8 @@ def execution_simple():
 #**************
 #Fuzzing Routes
 #**************
-@app.route('/fuzzing/simple/', methods=['GET'], defaults={'id':None})
-@app.route('/fuzzing/simple/<int:id>/', methods=['GET'])
+@APP.route('/fuzzing/simple/', methods=['GET'], defaults={'id':None})
+@APP.route('/fuzzing/simple/<int:id>/', methods=['GET'])
 def fuzzing_simple(id):
     data = None
     if id:
