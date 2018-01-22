@@ -1,7 +1,7 @@
 {#HACKY BUT WORKS#}
 {% macro recursiveComments(comments, id=0, depth=0)%}
     {% if comments %}
-        {% for comment in comments | commentCut(id) %}
+        {% for comment in comments | commentcut(id) %}
             <div class="row">
                 <div class="col-xs-6 col-xs-offset-{{ depth }}">
                     <h3>{{ comment[1] | safe }}</h3>
