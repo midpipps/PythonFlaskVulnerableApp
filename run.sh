@@ -3,7 +3,7 @@ if [ ! -d "venv" ]; then
   apt update
   apt install python3 -y
   apt install python3-pip -y
-  pip3 install virtualenv
+  pythno3 -m pip install virtualenv
   python3 -m virtualenv venv
   ./venv/bin/python3 -m pip install -r requirements.txt
 fi

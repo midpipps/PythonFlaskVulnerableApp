@@ -17,7 +17,4 @@ def create(overwrite=False):
     '''
     setup.db.sqlinjection.create(DB_PATHS, overwrite)
     setup.db.xss.create(DB_PATHS, overwrite)
-<<<<<<< HEAD
     setup.db.fuzzing.create(DB_PATHS, overwrite)
-=======
->>>>>>> origin/master
