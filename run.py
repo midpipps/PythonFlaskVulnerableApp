@@ -1,5 +1,5 @@
 from flask import Flask, render_template, send_from_directory, request, redirect, url_for, flash
-from setup.db import db, xss, sqlinjection
+from setup.db import db, xss, sqlinjection, fuzzing
 from setup.file import fileaccess
 from setup.execution import execute
 import logging
@@ -123,6 +123,20 @@ def execution_simple():
         ip = request.form['ip']
         results = execute.execute_ping(ip)
     return render_template('./execution/simple.html', ip = ip, results = results)
+#**************
+#End Execution Routes
+#**************
+
+#**************
+#Fuzzing Routes
+#**************
+@app.route('/fuzzing/simple/', methods=['GET'], defaults={'id':None})
+@app.route('/fuzzing/simple/<int:id>/', methods=['GET'])
+def fuzzing_simple(id):
+    data = None
+    if id:
+        data = fuzzing.getFuzzing(id)
+    return render_template('./fuzzing/simple.html', data=data)
 #**************
 #End Execution Routes
 #**************

@@ -1,0 +1,42 @@
+{% extends "basetemplate.html" %}
+{% block title %}Simple Fuzzing - {% endblock %}
+{% block head %}
+    {{ super() }}
+{% endblock %}
+{% block instructions %}
+    <p>
+        There is some data stored in here that is very secret.  See if you find it.
+    </p>
+{% endblock %}
+{% block content %}
+    <h1>Simple Fuzzing</h1>
+    <a href='/fuzzing/simple/1/'>Guest</a><br />
+    <a href='/fuzzing/simple/2/'>Zaphod</a><br />
+    <a href='/fuzzing/simple/3/'>Ford</a><br />
+    <a href='/fuzzing/simple/4/'>Arthur</a><br />
+    <a href='/fuzzing/simple/12/'>Trillian</a><br />
+    {% if data %}
+        <table class="table">
+            <thead class="thead-inverse">
+                <tr>
+                    <th>Name</th>
+                    <th>Data</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{ data[1] }}</td>
+                    <td>{{ data[2] }}</td>
+                </tr>
+            </tbody>
+        </table>
+    {% else %}
+    <p>There is nothing here</p>
+    {% endif %}
+{% endblock %}
+{% block footer %}
+    {{ super() }}
+{% endblock %}
+{% block scripts %}
+    {{ super() }}
+{% endblock %}
