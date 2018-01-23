@@ -22,6 +22,20 @@ def index():
     '''
     return render_template('index.html')
 
+@APP.route('/robots.txt')
+def robots():
+    '''
+    Route handler for the home page
+    '''
+    return send_from_directory(APP.static_folder, 'robots.txt')
+
+@APP.route('/mysecret/')
+def secret():
+    '''
+    Route handler for the home page
+    '''
+    return render_template('./mysecret.html')
+
 @APP.route('/reset/')
 def reset():
     '''
